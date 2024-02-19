@@ -1,0 +1,20 @@
+{
+  "name": "redis-traffic-monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "debug": "sudo node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.2",
+    "bunyan": "^1.8.15",
+    "bunyan-format": "^0.2.1",
+    "pcap": "^3.1.0",
+    "redis-proto": "^2.1.0"
+  }
+}
