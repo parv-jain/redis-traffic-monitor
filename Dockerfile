@@ -15,7 +15,7 @@ RUN apk add --update --no-cache \
     git
 
 # Clone the GitHub repository into the container
-RUN git clone https://github.com/{YOUR_GITHUB_USER_NAME}/redis-traffic-monitor .
+RUN git clone https://github.com/emasdigi/redis-query-analyzer .
 
 # Download and install any dependencies
 RUN npm ci
