@@ -47,7 +47,7 @@ class MetricsEmitter extends EventEmitter {
 
         return writeApi.close()
             .catch((err) => {
-                this.logger.error(err, 'Error in influx db write api write points')
+                this.logger.error({ err }, 'Error in influx db write api write points')
             })
     }
 }

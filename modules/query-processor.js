@@ -14,7 +14,7 @@ class QueryProcessor extends EventEmitter {
     start() {
         this.on('request', this.addQuery);
         this.on('response', this.processQueryResponse);
-        setInterval(this.metricsEmitter.publishMetrics.bind(this.metricsEmitter), 10 * 1000);
+        setInterval(this.metricsEmitter.publishMetrics.bind(this.metricsEmitter), 60 * 1000);
     }
 
     addQuery(query) {
@@ -38,10 +38,10 @@ class QueryProcessor extends EventEmitter {
         const response = this.respParser.parseData(value);
         const query = this.queries[key];
         if (query === null) {
-            this.logger.info({
-                response,
-                key,
-            }, 'Corresponding request not able to get parsed');
+            // this.logger.info({
+            //     response,
+            //     key,
+            // }, 'Corresponding request not able to get parsed');
             delete this.queries[key];
         } else if (query) {
             const duration_in_ns = process.hrtime.bigint() - query['startTime'];
