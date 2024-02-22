@@ -42,3 +42,15 @@ kubectl apply -f https://raw.githubusercontent.com/influxdata/docs-v2/master/sta
 ### Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+### Donation
+
+If you find this project helpful, consider supporting its development by making a donation:
+
+- Bitcoin: [Your Bitcoin Address]
+- Ethereum: [Your Ethereum Address]
+
+### Sponsor
+
+Become a sponsor and help fund the ongoing development and maintenance of this project. Your logo will be displayed here with a link to your website. Contact us for sponsorship inquiries.
+
