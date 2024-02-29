@@ -14,7 +14,7 @@ class QueryProcessor extends EventEmitter {
     start() {
         this.on('request', this.addQuery);
         this.on('response', this.processQueryResponse);
-        setInterval(this.metricsEmitter.publishMetrics.bind(this.metricsEmitter), 60 * 1000);
+        setInterval(this.metricsEmitter.publishMetrics.bind(this.metricsEmitter), 30 * 1000);
     }
 
     addQuery(query) {
