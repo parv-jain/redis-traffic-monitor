@@ -15,13 +15,20 @@
 - influxdb
 
 ### Setting up grafana:
-Refer: https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/
+```
+kubectl apply -f ./grafana/pod.yaml
+```
+
+- This creates an grafana Namespace, Service, and Deployment. A PersistentVolumeClaim is also created to store data written to grafana.
 
 ### Setting up influx db:
-Refer: https://docs.influxdata.com/influxdb/v2/install/
 ```
-kubectl apply -f https://raw.githubusercontent.com/influxdata/docs-v2/master/static/downloads/influxdb-k8-minikube.yaml
+kubectl apply -f ./influxdb/pod.yaml
 ```
+```
+kubectl port-forward -n influxdb service/influxdb 8086:8086
+```
+
 - This creates an influxdb Namespace, Service, and StatefulSet. A PersistentVolumeClaim is also created to store data written to InfluxDB.
 - Ensure the Pod is running: `kubectl get pods -n influxdb`
 - Ensure the Service is available: `kubectl describe service -n influxdb influxdb`
