@@ -4,12 +4,12 @@ const QueryProcessor = require('./query-processor');
 
 class PacketDecoder {
     constructor({ logger }) {
-        this.queries = {};
         this.logger = logger;
         this.queryProcessor = new QueryProcessor({ logger: this.logger });
         this.pcapSession = pcap.createSession(config.networkInterface, {filter: 'tcp and port 6379'});
         this.fragmentsMapByIdentification = new Map();
         this.segmentMapByNextSeqno = new Map();
+        // this.monitorClassMemory();
     }
 
     start() {
@@ -98,7 +98,7 @@ class PacketDecoder {
                         const segment = this.segmentMapByNextSeqno.get(current);
                         if (segment) {
                             chunks.unshift(segment);
-                            this.segmentMapByNextSeqno.delete(expectedNextSeqno);
+                            this.segmentMapByNextSeqno.delete(current);
                             current = segment.seqno;
                         } else {
                             current = null;
@@ -126,6 +126,12 @@ class PacketDecoder {
 
     handleError(err) {
         this.logger.error(err, 'Error in pcap session');
+    }
+
+    monitorClassMemory() {
+        setInterval(() => {
+            this.logger.info({ fragmentsSize: this.fragmentsMapByIdentification.size, segmentsSize: this.segmentMapByNextSeqno.size }, '[Packet decoder] monitor');
+        }, 60 * 1000)
     }
 }
 

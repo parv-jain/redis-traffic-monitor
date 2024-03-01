@@ -9,18 +9,15 @@ class QueryProcessor extends EventEmitter {
         this.logger = logger;
         this.metricsEmitter = new MetricsEmitter({ logger: this.logger });
         this.respParser = new RespParser({ logger: this.logger });
+        // this.monitorClassMemory();
     }
 
     start() {
         this.on('request', this.addQuery);
         this.on('response', this.processQueryResponse);
         setInterval(() => {
-            if (Object.keys(this.queries).length > 1) {
-                this.logger.info({ queries: this.queries }, '[QueryProcessor] Resetting queries')
-                this.queries = {};
-            }
             this.metricsEmitter.publishMetrics.bind(this.metricsEmitter)();
-        }, 10 * 1000);
+        }, 30 * 1000);
     }
 
     addQuery(query) {
@@ -52,6 +49,12 @@ class QueryProcessor extends EventEmitter {
             this.metricsEmitter.emit('query', query);
             delete this.queries[key];
         }
+    }
+
+    monitorClassMemory() {
+        setInterval(() => {
+            this.logger.info({ queriesSize: Object.keys(this.queries).length }, '[Query processor] monitor');
+        }, 60 * 1000)
     }
 }
 

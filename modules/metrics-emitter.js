@@ -11,6 +11,7 @@ class MetricsEmitter extends EventEmitter {
         this.influxDBConfig = config.influxDBConfig;
         this.influxDB = new InfluxDB({ url: this.influxDBConfig.url, token: this.influxDBConfig.token });
         this.on('query', this.addMetric);
+        // this.monitorClassMemory();
     }
 
     addMetric(data) {
@@ -50,6 +51,12 @@ class MetricsEmitter extends EventEmitter {
                 this.metrics = [];
                 this.logger.error({ err }, 'Error in influx db write api write points')
             })
+    }
+
+    monitorClassMemory() {
+        setInterval(() => {
+            this.logger.info({ metricsSize: this.metrics.length }, '[Metrics emitter] monitor');
+        }, 60 * 1000)
     }
 }
 
