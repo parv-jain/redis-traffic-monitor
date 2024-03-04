@@ -25,6 +25,8 @@ class QueryProcessor extends EventEmitter {
         const request = this.respParser.parseData(value);
         if (!request) {
             this.queries[key] = null;
+        } else if (!request[0] || !request[0][0]) {
+            this.logger.warn(request, 'Unknown request');
         } else {
             this.queries[key] = {
                 'request': request[0].join(' '),
