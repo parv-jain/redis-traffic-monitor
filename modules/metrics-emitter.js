@@ -11,7 +11,14 @@ class MetricsEmitter extends EventEmitter {
         this.influxDBConfig = config.influxDBConfig;
         this.influxDB = new InfluxDB({ url: this.influxDBConfig.url, token: this.influxDBConfig.token });
         this.on('query', this.addMetric);
+        this.start();
         // this.monitorClassMemory();
+    }
+
+    start() {
+        setInterval(() => {
+            this.publishMetrics.bind(this)();
+        }, 30 * 1000);
     }
 
     addMetric(data) {
@@ -32,13 +39,10 @@ class MetricsEmitter extends EventEmitter {
                 duration_in_ns: metric.duration_in_ns,
                 size_in_bytes: metric.size_in_bytes,
             };
-            const tags = {
-                command: metric.command,
-                sender: metric.sender,
-            }
             const point = new Point('redis_queries')
                 .tag('command', metric.command)
-                .tag('sender', metric.sender);
+                .tag('sender', metric.sender)
+                .tag('receiver', metric.receiver);
             point.fields = fields;
             
             dataPoints.push(point);

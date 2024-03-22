@@ -10,12 +10,8 @@ RUN apk add --no-cache --virtual .gyp \
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install necessary packages
-RUN apk add --update --no-cache \
-    git
-
-# Clone the GitHub repository into the container
-RUN git clone https://github.com/emasdigi/redis-query-analyzer .
+# Copy the source code into the container
+COPY . /redis-query-analyzer/
 
 # Download and install any dependencies
 RUN npm ci

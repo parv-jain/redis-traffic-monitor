@@ -1,5 +1,6 @@
 # redis-traffic-monitor
 
+- It tracks all Redis commands being executed in a Kubernetes cluster, without any change in Redis clients. It tracks metrics like execution time, response size in bytes, etc.
 - This Node.js repository contains a tool for monitoring Redis traffic using the tcpdump utility and pcap library. It provides functionality to track commands executed and the time taken to execute particular commands in a Redis instance, without being dependent on a specific Redis client or server implementation.
 
 ### Features
@@ -51,15 +52,3 @@ kubectl port-forward -n influxdb service/influxdb 8086:8086
 ### Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
-
-### Donation
-
-If you find this project helpful, consider supporting its development by making a donation:
-
-- Bitcoin: [Your Bitcoin Address]
-- Ethereum: [Your Ethereum Address]
-
-### Sponsor
-
-Become a sponsor and help fund the ongoing development and maintenance of this project. Your logo will be displayed here with a link to your website. Contact us for sponsorship inquiries.
-
