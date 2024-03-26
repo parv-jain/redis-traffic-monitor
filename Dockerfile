@@ -8,7 +8,7 @@ RUN apk add --no-cache --virtual .gyp \
         libpcap-dev
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /redis-query-analyzer
 
 # Copy the source code into the container
 COPY . /redis-query-analyzer/
