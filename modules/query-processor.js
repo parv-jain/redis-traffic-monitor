@@ -9,6 +9,7 @@ class QueryProcessor extends EventEmitter {
         this.logger = logger;
         this.metricsEmitter = new MetricsEmitter({ logger: this.logger });
         this.respParser = new RespParser({ logger: this.logger });
+        this.systemCommands = ['CLIENT', 'CLUSTER'];
         // this.monitorClassMemory();
     }
 
@@ -35,6 +36,7 @@ class QueryProcessor extends EventEmitter {
                 sender,
                 receiver,
             };
+            this.queries[key]['type'] = (this.systemCommands.includes(this.queries[key]['command'])) ? 'system' : 'user';
         }
     }
 
