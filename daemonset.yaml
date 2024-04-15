@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: redis-query-analyzer
+  name: redis-query-analyzer
+  namespace: staging-app
+spec:
+  selector:
+    matchLabels:
+      app: redis-query-analyzer
+  template:
+    metadata:
+      labels:
+        app: redis-query-analyzer
+    spec:
+      containers:
+      - name: redis-query-analyzer
+        image: 411137332098.dkr.ecr.ap-southeast-3.amazonaws.com/redis-query-analyzer
+        imagePullPolicy: IfNotPresent
+        resources: 
+           limits:
+            cpu: 200m
+            memory: 1024Mi
+           requests:
+            cpu: 10m
+            memory: 100Mi       
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
