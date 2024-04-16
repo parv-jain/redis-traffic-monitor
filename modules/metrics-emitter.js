@@ -38,11 +38,10 @@ class MetricsEmitter extends EventEmitter {
                 startTime: metric.startTime,
                 duration_in_ns: metric.duration_in_ns,
                 size_in_bytes: metric.size_in_bytes,
-                operation: JSON.stringify(metric.operation),
             };
             const point = new Point('redis_queries')
                 .tag('command', metric.command)
-                .tag('operation', metric.operation)
+                .tag('operation', JSON.stringify(metric.operation))
                 .tag('type', metric.type)
                 .tag('sender', metric.sender)
                 .tag('receiver', metric.receiver);
