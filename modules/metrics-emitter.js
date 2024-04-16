@@ -42,6 +42,7 @@ class MetricsEmitter extends EventEmitter {
             };
             const point = new Point('redis_queries')
                 .tag('command', metric.command)
+                .tag('operation', metric.operation)
                 .tag('type', metric.type)
                 .tag('sender', metric.sender)
                 .tag('receiver', metric.receiver);
