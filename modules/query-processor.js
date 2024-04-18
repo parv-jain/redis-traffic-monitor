@@ -9,7 +9,7 @@ class QueryProcessor extends EventEmitter {
         this.logger = logger;
         this.metricsEmitter = new MetricsEmitter({ logger: this.logger });
         this.respParser = new RespParser({ logger: this.logger });
-        this.systemCommands = ['CLIENT', 'CLUSTER', 'INFO', 'READONLY', 'HELLO'];
+        this.systemCommands = ['CLIENT', 'CLUSTER', 'INFO', 'READONLY', 'HELLO', 'PING'];
         // this.monitorClassMemory();
     }
 
