@@ -18,7 +18,7 @@ class MetricsEmitter extends EventEmitter {
     start() {
         setInterval(() => {
             this.publishMetrics.bind(this)();
-        }, 30 * 1000);
+        }, 60 * 1000);
     }
 
     addMetric(data) {
