@@ -13,9 +13,9 @@ module.exports = {
         topic: 'redis-queries',
         brokers: process.env.KAFKA_BOOTSTRAP_BROKERS || ['localhost:9092'],
         ssl: process.env.KAFKA_ACCESS_CERT && process.env.KAFKA_CA_CERT && process.env.KAFKA_ACCESS_KEY ? {
-            cert: Buffer.from(env.KAFKA_ACCESS_CERT, 'base64').toString('utf8'),
-            ca: Buffer.from(env.KAFKA_CA_CERT, 'base64').toString('utf8'),                 
-            key: Buffer.from(env.KAFKA_ACCESS_KEY, 'base64').toString('utf8'),           
+            cert: Buffer.from(process.env.KAFKA_ACCESS_CERT, 'base64').toString('utf8'),
+            ca: Buffer.from(process.env.KAFKA_CA_CERT, 'base64').toString('utf8'),                 
+            key: Buffer.from(process.env.KAFKA_ACCESS_KEY, 'base64').toString('utf8'),           
         }
         : undefined,
     }
