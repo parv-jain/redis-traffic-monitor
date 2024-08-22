@@ -14,6 +14,7 @@
     "@influxdata/influxdb-client": "^1.33.2",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
+    "kafkajs": "^2.2.4",
     "pcap": "^3.1.0",
     "redis-proto": "^2.1.0"
   }

@@ -85,10 +85,11 @@ metadata:
 
 spec:
   ports:
-    - port: 3000
+    - name: http
+      port: 80
       protocol: TCP
       targetPort: http-grafana
   selector:
     app: grafana
   sessionAffinity: None
-  type: LoadBalancer
+  type: ClusterIP

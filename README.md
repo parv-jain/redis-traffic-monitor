@@ -23,6 +23,10 @@ kubectl apply -f ./grafana/pod.yaml
 kubectl port-forward -n grafana service/grafana 3000:3000
 ```
 - This creates an grafana Namespace, Service, and Deployment. A PersistentVolumeClaim is also created to store data written to grafana.
+- Ensure the Pod is running: `kubectl get pods -n grafana`
+- Ensure the Service is available: `kubectl describe service -n grafana grafana`
+- Forward port 3000 from inside the cluster to localhost:
+`kubectl port-forward -n grafana service/grafana 3000:80`
 
 ### Setting up influx db:
 ```

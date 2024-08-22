@@ -11,10 +11,10 @@ class PacketDecoder {
         // this.monitorClassMemory();
     }
 
-    start() {
+    async start() {
+        await this.queryProcessor.start();
         this.pcapSession.on('packet', this.segmentsReassembly.bind(this));
         this.pcapSession.on('error', this.handleError.bind(this));
-        this.queryProcessor.start();
         this.logger.info('Started packet decoder');
     }
 

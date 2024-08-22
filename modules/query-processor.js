@@ -13,7 +13,8 @@ class QueryProcessor extends EventEmitter {
         // this.monitorClassMemory();
     }
 
-    start() {
+    async start() {
+        await this.metricsEmitter.start();
         this.on('request', this.addQuery);
         this.on('response', this.processQueryResponse);
     }
@@ -30,7 +31,7 @@ class QueryProcessor extends EventEmitter {
                 'request': request[0].join(' '),
                 'command': request[0][0].toUpperCase(),
                 'operation': `${request[0][0].toUpperCase()} ${request[0][1]}`,
-                'startTime': process.hrtime.bigint(),
+                'start_time': process.hrtime.bigint(),
                 'duration_in_ns': 0,
                 'size_in_bytes': 0,
                 sender,
@@ -47,7 +48,7 @@ class QueryProcessor extends EventEmitter {
         if (query === null) {
             delete this.queries[key];
         } else if (query) {
-            const duration_in_ns = process.hrtime.bigint() - query['startTime'];
+            const duration_in_ns = process.hrtime.bigint() - query['start_time'];
             query['duration_in_ns'] = duration_in_ns;
             query['size_in_bytes'] = Buffer.byteLength(value);
             this.metricsEmitter.emit('query', query);
