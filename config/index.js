@@ -11,7 +11,7 @@ module.exports = {
     networkInterface: process.env.NETWORK_INTERFACE || 'lo0',
     kafka: {
         topic: 'redis-queries',
-        brokers: process.env.KAFKA_BOOTSTRAP_BROKERS || ['localhost:9092'],
+        brokers: process.env.KAFKA_BOOTSTRAP_BROKERS ? process.env.KAFKA_BOOTSTRAP_BROKERS.split(',') : ['localhost:9092'],
         ssl: process.env.KAFKA_ACCESS_CERT && process.env.KAFKA_CA_CERT && process.env.KAFKA_ACCESS_KEY ? {
             cert: Buffer.from(process.env.KAFKA_ACCESS_CERT, 'base64').toString('utf8'),
             ca: Buffer.from(process.env.KAFKA_CA_CERT, 'base64').toString('utf8'),                 
