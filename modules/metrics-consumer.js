@@ -113,6 +113,12 @@ class MetricsConsumer {
                         type: metric.type,
                         sender: metric.sender,
                         receiver: metric.receiver,
+                    },
+                    fields: {
+                        request: JSON.stringify(metric.request),
+                        start_time: metric.start_time,
+                        duration_in_ns: metric.duration_in_ns,
+                        size_in_bytes: metric.size_in_bytes,    
                     }
                 };
             });
