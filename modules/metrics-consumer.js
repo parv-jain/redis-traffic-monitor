@@ -1,4 +1,5 @@
 const { InfluxDB, Point } = require('@influxdata/influxdb-client');
+const Influx = require('influx');
 const { Kafka, PartitionAssigners, logLevel } = require('kafkajs')
 const config = require('../config');
 const { hostname } = require('node:os');
@@ -7,7 +8,18 @@ class MetricsConsumer {
     constructor({ logger }) {
         this.logger = logger;
         this.influxDBConfig = config.influxDBConfig;
-        this.influxDB = new InfluxDB({ url: this.influxDBConfig.url, token: this.influxDBConfig.token });
+        if (this.influxDBConfig.version === '2.x') {
+            this.influxDB = new InfluxDB({ url: this.influxDBConfig.url, token: this.influxDBConfig.token });
+        } else {
+            this.influxDB = new Influx.InfluxDB({
+                host: this.influxDBConfig['1.x'].host,
+                port: this.influxDBConfig['1.x'].port,
+                protocol: this.influxDBConfig['1.x'].protocol,
+                database: this.influxDBConfig['1.x'].database,
+                username: this.influxDBConfig['1.x'].username,
+                password: this.influxDBConfig['1.x'].password,
+            });
+        }
         this.kafka = new Kafka({
             logLevel: logLevel.WARN,
             brokers: config.kafka.brokers,
@@ -60,36 +72,60 @@ class MetricsConsumer {
                 metrics.push(parsedValue);
             }
         }
-        const writeApi = this.influxDB.getWriteApi(this.influxDBConfig.org, this.influxDBConfig.bucket)
-        writeApi.useDefaultTags({location: hostname()});
-        const dataPoints = [];
-        metrics.forEach((metric) => {
-            const fields = {
-                request: JSON.stringify(metric.request),
-                start_time: metric.start_time,
-                duration_in_ns: metric.duration_in_ns,
-                size_in_bytes: metric.size_in_bytes,
-            };
-            const point = new Point('redis_queries')
-                .tag('command', metric.command)
-                .tag('operation', JSON.stringify(metric.operation))
-                .tag('type', metric.type)
-                .tag('sender', metric.sender)
-                .tag('receiver', metric.receiver);
-            point.fields = fields;
-            dataPoints.push(point);
-        });
-        writeApi.writePoints(dataPoints);
-        return writeApi.close()
-            .then(async () => {
-                // this.logger.info({ metrics }, 'Metrics written to influxdb');
-                // Introduce an artificial delay to slow down processing
-                // await new Promise(resolve => setTimeout(resolve, 30000)); // 30s delay
-            })
-            .catch((err) => {
-                this.metrics = [];
-                this.logger.error({ err }, 'Error in influx db write api write points')
+        if (this.influxDBConfig.version === '2.x') {
+            const writeApi = this.influxDB.getWriteApi(this.influxDBConfig.org, this.influxDBConfig.bucket)
+            writeApi.useDefaultTags({location: hostname()});
+            const dataPoints = [];
+            metrics.forEach((metric) => {
+                const fields = {
+                    request: JSON.stringify(metric.request),
+                    start_time: metric.start_time,
+                    duration_in_ns: metric.duration_in_ns,
+                    size_in_bytes: metric.size_in_bytes,
+                };
+                const point = new Point('redis_queries')
+                    .tag('command', metric.command)
+                    .tag('operation', JSON.stringify(metric.operation))
+                    .tag('type', metric.type)
+                    .tag('sender', metric.sender)
+                    .tag('receiver', metric.receiver);
+                point.fields = fields;
+                dataPoints.push(point);
             });
+            writeApi.writePoints(dataPoints);
+            return writeApi.close()
+                .then(async () => {
+                    // this.logger.info({ metrics }, 'Metrics written to influxdb');
+                    // Introduce an artificial delay to slow down processing
+                    // await new Promise(resolve => setTimeout(resolve, 30000)); // 30s delay
+                })
+                .catch((err) => {
+                    this.logger.error({ err }, 'Error in influx db write api write points')
+                });
+        } else {
+            const points = metrics.map((metric) => {
+                return {
+                    measurement: 'redis_queries',
+                    tags: {
+                        location: hostname(),
+                        command: metric.command,
+                        operation: JSON.stringify(metric.operation),
+                        type: metric.type,
+                        sender: metric.sender,
+                        receiver: metric.receiver,
+                    }
+                };
+            });
+            return this.influxDB.writePoints(points)
+                .then(async () => {
+                    // this.logger.info({ metrics }, 'Metrics written to influxdb');
+                    // Introduce an artificial delay to slow down processing
+                    // await new Promise(resolve => setTimeout(resolve, 30000)); // 30s delay
+                })
+                .catch((err) => {
+                    this.logger.error({ err }, 'Error in influx db write api write points')
+                });
+        }
     }
 }
 
