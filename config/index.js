@@ -3,7 +3,7 @@ module.exports = {
         port: Number(process.env.REDIS_PORT) || 6379,
     },
     influxDBConfig: {
-        version: '1.x', // '2.x' | '1.x'
+        version: process.env.INFLUX_VERSION || '2.x', // '2.x' | '1.x'
         url: process.env.INFLUX_DB_URL || 'http://localhost:8086',
         token: process.env.INFLUX_DB_TOKEN || 'pN-lNl1SJ1ist5TTxd1vHFpuxZanhil0e8z9hvZfOEYQRa0GNUI-XPghIMkCex2oLvoMAJlRTkFLfGg1TXcTKQ==',
         org: process.env.INFLUX_DB_ORG || 'localorg',
