@@ -18,6 +18,25 @@ class MetricsConsumer {
                 database: this.influxDBConfig['1.x'].database,
                 username: this.influxDBConfig['1.x'].username,
                 password: this.influxDBConfig['1.x'].password,
+                schema: [
+                    {
+                      measurement: 'redis_queries',
+                      fields: {
+                        request: Influx.FieldType.STRING,
+                        start_time: Influx.FieldType.INTEGER,
+                        duration_in_ns: Influx.FieldType.INTEGER,
+                        size_in_bytes: Influx.FieldType.INTEGER,
+                      },
+                      tags: [
+                        'location',
+                        'command',
+                        'operation',
+                        'type',
+                        'sender',
+                        'receiver'
+                      ]
+                    }
+                ]
             });
         }
         this.kafka = new Kafka({
