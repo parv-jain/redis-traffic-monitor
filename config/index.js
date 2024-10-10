@@ -27,5 +27,6 @@ module.exports = {
             key: Buffer.from(process.env.KAFKA_ACCESS_KEY, 'base64').toString('utf8'),           
         }
         : undefined,
-    }
+    },
+    pushMetricsToInfluxDb: false, // true if metrics need to be consumed from kafka and to be published to influxdb
 };
